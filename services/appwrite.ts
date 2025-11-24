@@ -1,4 +1,4 @@
-import { Account, Client, Databases, Query } from "react-native-appwrite";
+import { Account, Client, Databases, ID, Query } from "react-native-appwrite";
 
 const client = new Client()
   .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!)
@@ -29,7 +29,31 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
       [Query.equal("searchTerm", query)]
     );
 
-    console.log(result);
+    if (result.documents.length > 0) {
+      const existingMovie = result.documents[0];
+
+      await database.updateDocument(
+        DATABASE_ID,
+        TABLE_ID,
+        existingMovie.$id,
+        {
+          count: existingMovie.count + 1,
+        }
+      )
+    } else {
+      await database.createDocument(
+        DATABASE_ID,
+        TABLE_ID,
+        ID.unique(),
+        {
+          searchTerm: query,
+          movie_id: movie.id,
+          count: 1,
+          poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+          title: movie.title,
+        }
+      )
+    }
   } catch (error) {
     console.error('❌ Error updating search count:', error);
     throw error;
