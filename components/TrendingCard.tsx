@@ -20,6 +20,7 @@ const TrendingCard = ({ movie: { movie_id, title, poster_url }, index }: Trendin
             <Image source={images.rankingGradient} className="size-14" resizeMode="cover" />
           </MaskedView>
         </View>
+        <Text className="text-light-200 text-sm font-bold mt-2" numberOfLines={2}>{title}</Text>
       </TouchableOpacity>
     </Link>
   )

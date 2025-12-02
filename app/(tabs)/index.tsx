@@ -68,7 +68,7 @@ export default function Index() {
                       <TrendingCard movie={item} index={index} />
                     </Text>
                   )}
-                  keyExtractor={(item) => item.movie_id.toString()}
+                  keyExtractor={(item, index) => (item as any).$id || `${item.movie_id}-${index}`}
                   />
               </View>
             )}
